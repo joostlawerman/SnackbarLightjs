@@ -2,7 +2,7 @@
   "name": "snackbarlightjs",
   "version": "1.0.2",
   "description": "Easy snackbars without JQuery",
-  "main": "src/snackbarlight",
+  "main": "src/js/snackbarlight",
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",

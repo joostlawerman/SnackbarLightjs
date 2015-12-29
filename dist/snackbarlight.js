@@ -216,7 +216,6 @@ for (var i = elements.length - 1; i >= 0; i--) {
 	});
 }
 
-
 if (typeof exports === 'object') {
 	// Node etc.
 	module.exports = new Snackbar();
