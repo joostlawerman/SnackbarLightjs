@@ -41,5 +41,11 @@ If you want to preform an action when the snackbar is clicked upon you can!
 		alert("Why did you have to close me!");
 		});
 
+## Browserify
+	
+	var snackbar = require("snackbarlightjs");
+
+	new snackbar("I can be used here also awesome!");
+
 ## LICENSE
 MIT

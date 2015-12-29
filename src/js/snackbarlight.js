@@ -178,12 +178,10 @@ Snackbar.prototype = {
 	activateOptions: function(newOptions) {
 		var __self = this,
   			options = newOptions || {};
-  		console.log(options);
 
     	for (var opt in this.options) {
         	if (__self.options.hasOwnProperty(opt) && !options.hasOwnProperty(opt)) {
             	options[opt] = __self.options[opt];
-        		console.log(opt);
         	}
         }
        	return options;
@@ -192,7 +190,6 @@ Snackbar.prototype = {
 
 // Search all elements for the data toggle the snackbar
 var elements = document.querySelectorAll("[data-toggle=snackbarlight]");
-
 
 // Loop them and add event listeners to them
 for (var i = elements.length - 1; i >= 0; i--) {
@@ -211,7 +208,11 @@ for (var i = elements.length - 1; i >= 0; i--) {
 		if (this.getAttribute("data-url")) {
 			options.url = this.getAttribute("data-url");
 		}
-		
+			
 		new Snackbar(this.getAttribute("data-content"), options);
 	});
+}
+if (typeof exports === 'object') {
+	// Node etc.
+	module.exports = Snackbar;
 }
