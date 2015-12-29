@@ -190,9 +190,9 @@ Snackbar.prototype = {
 	}
 };
 
+
 // Search all elements for the data toggle the snackbar
 var elements = document.querySelectorAll("[data-toggle=snackbarlight]");
-
 
 // Loop them and add event listeners to them
 for (var i = elements.length - 1; i >= 0; i--) {
@@ -214,4 +214,10 @@ for (var i = elements.length - 1; i >= 0; i--) {
 		
 		new Snackbar(this.getAttribute("data-content"), options);
 	});
+}
+
+
+if (typeof exports === 'object') {
+	// Node etc.
+	module.exports = new Snackbar();
 }
