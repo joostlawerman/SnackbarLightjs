@@ -1,6 +1,6 @@
 {
   "name": "snackbarlightjs",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Easy snackbars without JQuery",
   "main": "src/snackbarlight",
   "devDependencies": {
