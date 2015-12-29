@@ -1,10 +1,10 @@
-#notify-container {
+#snackbar-container {
   position: fixed;
   left: 20px;
   bottom: 0;
   z-index: 99999;
 }
-.notify {
+.snackbar {
   overflow: hidden;
   clear: both;
   min-width: 288px;
@@ -12,36 +12,36 @@
   cursor: pointer;
   opacity: 0;
 }
-.notify.active {
+.snackbar.active {
   height: auto;
   opacity: 1;
 }
 @media (max-width: 767px) {
-  #notify-container {
+  #snackbar-container {
     left: 0px !important;
     right: 0px;
     width: 100%;
   }
-  #notify-container .notify {
+  #snackbar-container .snackbar {
     min-width: 100%;
   }
 }
 
 @media (max-width: 767px) {
-  #notify-container {
+  #snackbar-container {
     left: 0px !important;
     right: 0px;
     width: 100%;
   }
-  #notify-container .notify {
+  #snackbar-container .snackbar {
     min-width: 100%;
   }
-  #notify-container [class="notify active"] {
+  #snackbar-container [class="snackbar active"] {
     border-radius: 0;
     margin-bottom: 0;
   }
 }
-.notify {
+.snackbar {
   background-color: #323232;
   color: #FFFFFF; 
   font-size: 14px;
@@ -55,7 +55,7 @@
   -webkit-transform: translateY(200%);
   transform: translateY(200%);
 }
-.notify.active > a {
+.snackbar.active > a {
   text-decoration: none;
   line-height: 100%;
   font-weight: bold;
@@ -63,7 +63,7 @@
   float: right;
   color: #4CAF50;
 }
-.notify.active {
+.snackbar.active {
   padding: 14px 24px 14px 24px;
   margin-bottom: 20px;
   height: auto;

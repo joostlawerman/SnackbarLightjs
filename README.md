@@ -1,7 +1,8 @@
 # SnackbarLightjs
 Easy snackbars without JQuery (and its only 3kb minified!)
+Customize your snackbars or use the basic css file
 
-# Usage
+## Usage
 Create snackbars with javascript
 
 	new Snackbar("Hey! Im a snackbar");
@@ -10,7 +11,7 @@ or even easier write it right in your html
 
 	<span data-toggle=snackbar data-content="Hey! Im a snackbar">Click me</span>
 
-# Options
+## Options
 	
 	options: {
 		// How long it takes for the snackbar to disappear
@@ -33,12 +34,12 @@ You can also specify these in your html
 		data-active-class="active">
 	Click me</span>
 
-# Callbacks
+## Callbacks
 If you want to preform an action when the snackbar is clicked upon you can!
 
 	new Snackbar("Hey! Im a snackbar",{},function(){
 		alert("Why did you have to close me!");
 		});
 
-# LICENSE
+## LICENSE
 MIT
