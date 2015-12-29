@@ -15,6 +15,9 @@ gulp.task('lint', function() {
 
 gulp.task('minify-css', function() {
   return gulp.src('./src/css/*.css')
+    .pipe(concat('snackbarlight.css'))
+    .pipe(gulp.dest('./dist/'))
+    .pipe(rename('snackbarlight.min.css'))
     .pipe(minifyCss({compatibility: 'ie8'}))
     .pipe(gulp.dest('./dist/'));
 });
@@ -22,7 +25,7 @@ gulp.task('minify-css', function() {
 gulp.task('scripts', function() {
     return gulp.src('./src/js/*.js')
         .pipe(concat('snackbarlight.js'))
-        .pipe(gulp.dest('dist'))
+        .pipe(gulp.dest('./dist/'))
         .pipe(rename('snackbarlight.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('./dist/'));
