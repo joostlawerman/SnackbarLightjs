@@ -18,6 +18,7 @@ function Snackbar(data, options, callback){
 }
 
 Snackbar.prototype = {
+
 	/**
 	 * Default options
 	 *
@@ -33,7 +34,6 @@ Snackbar.prototype = {
 		// If not used clicking will activate the callback or do nothing
 		url: "#",
 	},
-
 
 	/**
 	 * Create container for the snackbar

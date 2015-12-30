@@ -6,6 +6,7 @@ Customize your snackbars or use the basic css file
 Create snackbars with javascript
 
 	new Snackbar("Hey! Im a snackbar");
+	// Snackbar(message, options, callback)
 
 or even easier write it right in your html
 
