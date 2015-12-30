@@ -13,7 +13,7 @@ function Snackbar(data, options, callback){
 		this.start();
 		this.snackbar();
 	} else {
-		console.warn("SnackbarLight: You cant create a empty snackbar please give it a string.");
+		console.warn("SnackbarLight: You can not create a empty snackbar please give it a string.");
 	}
 }
 
@@ -33,6 +33,7 @@ Snackbar.prototype = {
 		// If not used clicking will activate the callback or do nothing
 		url: "#",
 	},
+
 
 	/**
 	 * Create container for the snackbar
@@ -178,21 +179,57 @@ Snackbar.prototype = {
 	activateOptions: function(newOptions) {
 		var __self = this,
   			options = newOptions || {};
-  		console.log(options);
 
     	for (var opt in this.options) {
         	if (__self.options.hasOwnProperty(opt) && !options.hasOwnProperty(opt)) {
             	options[opt] = __self.options[opt];
-        		console.log(opt);
         	}
         }
        	return options;
+	},
+};
+
+// Object to support vue
+SnackbarLight = {
+	/**
+	 * Install function for Vue
+	 *
+	 * @param  {Object} Vue
+	 * @return {void}
+	 */
+	install: function(Vue){
+		var __self = this;
+		Vue.prototype.$snackbar = {};
+	  	Vue.prototype.$snackbar.create = function(data, options, callback){
+	  		__self.create(data, options, callback);
+	  	};
+	},
+
+	/**
+	 * Create a new snackbar
+	 *
+	 * @param  {string}   data
+	 * @param  {Object}   options
+	 * @param  {Function} callback
+	 * @return {void}
+	 */
+	create: function(data, options, callback){
+		new Snackbar(data, options, callback);
 	}
 };
 
+// Export if needed
+if (typeof exports == "object") {
+    module.exports = SnackbarLight;
+} else if (typeof define == "function" && define.amd) {
+	define([], function(){ return SnackbarLight });
+} else if (window.Vue) {
+	// Vue use if vue is installed or being used on the page
+	Vue.use(SnackbarLight);
+}
 
 // Search all elements for the data toggle the snackbar
-var elements = document.querySelectorAll("[data-toggle=snackbarlight]");
+var elements = document.querySelectorAll("[data-toggle=snackbar]");
 
 // Loop them and add event listeners to them
 for (var i = elements.length - 1; i >= 0; i--) {
@@ -211,12 +248,7 @@ for (var i = elements.length - 1; i >= 0; i--) {
 		if (this.getAttribute("data-url")) {
 			options.url = this.getAttribute("data-url");
 		}
-		
+			
 		new Snackbar(this.getAttribute("data-content"), options);
 	});
-}
-
-if (typeof exports === 'object') {
-	// Node etc.
-	module.exports = new Snackbar();
 }

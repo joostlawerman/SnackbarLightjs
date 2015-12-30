@@ -35,17 +35,33 @@ You can also specify these in your html
 	Click me</span>
 
 ## Callbacks
-If you want to preform an action when the snackbar is clicked upon you can!
+You can attach a callback function for when the snackbar is clicked upon.
 
 	new Snackbar("Hey! Im a snackbar",{},function(){
 		alert("Why did you have to close me!");
 		});
 
 ## Browserify
+[npm](https://www.npmjs.com/package/snackbarlightjs)
 	
-	var snackbar = require("snackbarlightjs");
+	var Snackbar = require("snackbarlightjs");
 
-	new snackbar("I can be used here also awesome!");
+	Snackbar.create("I can be used here also awesome!", {}, function(){});
+
+## Vuejs
+This package does support usage in [Vuejs](http://vuejs.org/)
+[npm](https://www.npmjs.com/package/snackbarlightjs)
+
+Basic usage:
+
+	this.$snackbar.create("Vuejs is awsome!", {}, function(){});
+	
+### With Browserify
+If you use Browserify to compile your vue you need to call Vue.use() on it
+
+	var Snackbar = require("snackbarlightjs");
+
+	Vue.use(Snackbar);
 
 ## LICENSE
 MIT
