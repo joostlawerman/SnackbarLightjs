@@ -43,7 +43,9 @@ Snackbar.prototype = {
 	start: function() {
 		if (!document.getElementById("snackbar-container")) {
 			var snackbarContainer = document.createElement("div");
+			
 			snackbarContainer.setAttribute("id", "snackbar-container");
+			
 			document.body.appendChild(snackbarContainer);
 		}
 	},
@@ -189,7 +191,9 @@ Snackbar.prototype = {
 	},
 };
 
-// Object to support vue
+///////////////////////////////
+// Vuejs/ browserify support //
+///////////////////////////////
 SnackbarLight = {
 	/**
 	 * Install function for Vue
@@ -218,15 +222,19 @@ SnackbarLight = {
 	}
 };
 
-// Export if needed
 if (typeof exports == "object") {
+	// Export
     module.exports = SnackbarLight;
 } else if (typeof define == "function" && define.amd) {
 	define([], function(){ return SnackbarLight });
 } else if (window.Vue) {
-	// Vue use if vue is installed or being used on the page
+	// Vue use if vue is being used on the page
 	Vue.use(SnackbarLight);
 }
+
+/////////////////
+// Data-toggle //
+/////////////////
 
 // Search all elements for the data toggle the snackbar
 var elements = document.querySelectorAll("[data-toggle=snackbar]");
