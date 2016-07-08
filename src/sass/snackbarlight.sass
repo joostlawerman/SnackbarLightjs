@@ -1,0 +1,72 @@
+#snackbar-container 
+    bottom: 0
+    left: 20px
+    position: fixed
+    z-index: 99999
+
+.snackbar
+    height: 0px  
+    clear: both
+    cursor: pointer
+    max-width: 568px
+    min-width: 288px
+    opacity: 0
+    overflow: hidden
+    color: #FFF 
+    background-color: #323232
+    font-size: 14px
+    
+    padding: 0 24px 0 24px;
+
+    transition-property: all
+    transition-duration: 0.5s
+    transition-timing-function: ease
+  
+    transform: translateY(200%)
+    -moz-transform: translateY(200%)
+    -webkit-transform: translateY(200%)
+
+.snackbar-active
+    opacity: 1
+    margin-bottom: 20px
+    
+    height: auto
+    padding: 14px 24px 14px 24px
+    
+
+    transition-property: all //opacity, bottom, width, margin, border-radius, transform
+    transition-duration: 0.5s
+    transition-timing-function: ease
+    
+    -moz-transform: none
+    -webkit-transform: none
+    transform: none
+  
+.snackbar.active > a
+    text-decoration: none
+    line-height: 100%
+    font-weight: bold
+    margin-left: 24px
+    float: right
+    color: #4CAF50
+
+@media (max-width: 767px)
+    #snackbar-container
+        left: 0px !important
+        right: 0px
+        width: 100%
+
+    #snackbar-container .snackbar-active
+        min-width: 100%
+      
+    #snackbar-container
+        left: 0px !important
+        right: 0px
+        width: 100%
+    
+    #snackbar-container .snackbar-active
+        min-width: 100%
+    
+    #snackbar-container [class="snackbar-active"]
+        border-radius: 0
+        margin-bottom: 0
