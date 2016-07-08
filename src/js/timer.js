@@ -1,4 +1,4 @@
-export class Timer {
+class Timer {
 	constructor(callback, remaining){
 		// Create random timer id
 		this.timerId = Math.round(Math.random()*1000);
@@ -24,3 +24,5 @@ export class Timer {
         this.timerId = window.setTimeout(callback, this.remaining);
     }
 }
+
+module.exports = Timer;

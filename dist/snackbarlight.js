@@ -1,262 +1,379 @@
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 /**
- * Constructor
- *
- * @param {[type]}   data     [description]
- * @param {[type]}   options  [description]
- * @param {Function} callback [description]
+ * Snackbar
  */
-function Snackbar(data, options, callback){
-	if (data !== "") {
-		this.options = this.activateOptions(options);
-		this.data = data;
-		this.callback = callback;
-		this.start();
-		this.snackbar();
-	} else {
-		console.warn("SnackbarLight: You can not create a empty snackbar please give it a string.");
+
+var Snackbar = function () {
+	function Snackbar(data, options, callback) {
+		_classCallCheck(this, Snackbar);
+
+		if (data !== "") {
+			this.options = this.activateOptions(options);
+			this.data = data;
+			this.callback = callback;
+
+			this.ensureContainerExists();
+			this.createElement();
+		} else {
+			console.warn("SnackbarLight: You can not create a empty snackbar please give it a string.");
+		}
 	}
-}
-
-Snackbar.prototype = {
 
 	/**
-	 * Default options
-	 *
-	 * @type {Object}
-	 */
-	options: {
-		// How long it takes for the snackbar to disappear
-		timeout: 5000,
-		// Wich class is used to tell that the snackbar is active
-		activeClass: "active",
-		// Name of the link or action if specified
-		link: false,
-		// If not used clicking will activate the callback or do nothing
-		url: "#",
-	},
+  * Start function inserting the basic components
+  *
+  * @return {Void}
+  */
 
-	/**
-	 * Create container for the snackbar
-	 *
-	 * @return {void}
-	 */
-	start: function() {
-		if (!document.getElementById("snackbar-container")) {
-			var snackbarContainer = document.createElement("div");
-			
-			snackbarContainer.setAttribute("id", "snackbar-container");
-			
-			document.body.appendChild(snackbarContainer);
-		}
-	},
 
-	/**
-	 * Timer
-	 *
-	 * @param  {Function} callback
-	 * @param  {int}   delay
-	 * @return {void}
-	 */
-	timer: function(callback, delay) {
-	    var remaining = delay;
+	_createClass(Snackbar, [{
+		key: "ensureContainerExists",
+		value: function ensureContainerExists() {
+			// If the Snackbar container does not exist create it
+			if (!document.getElementById("snackbar-container")) {
+				var snackbarContainer = document.createElement("div");
 
-	    this.timer = {
-	    	// Create random timer id
-	    	timerId: Math.round(Math.random()*1000),
+				snackbarContainer.setAttribute("id", "snackbar-container");
 
-		    pause: function() {
-		        // Clear the timeout
-		        window.clearTimeout(this.timerId);
-		        // Set the remaining to what time remains
-		        remaining -= new Date() - start;
-		    },
-
-		    resume: function() {
-		        start = new Date();
-		        // Clear the timeout
-		        window.clearTimeout(this.timerId);
-		        // Set the timeout again
-		        this.timerId = window.setTimeout(callback, remaining);
-		    },	
-	    };
-	    // Start the timer
-	    this.timer.resume();
-	},
-
-	/**
-	 * snackbar
-	 *
-	 * @return {void}
-	 */
-	snackbar: function() {
-		var __self = this,
-			snackbar = document.createElement("div");
-		
-		// Put the snackbar inside the snackbar container
-		document.getElementById("snackbar-container").appendChild(snackbar);
-
-	  	// Set the html inside the snackbar
-	  	snackbar.innerHTML = this.getData();
-		
-		// Set the class of the snackbar
-		snackbar.setAttribute("class", "snackbar");
-
-		// Wait to set the active class so animations will be activated
-		setTimeout(function() {
-			snackbar.setAttribute("class","snackbar " + __self.options.activeClass);
-		}, 50);
-
-		// If the timeout is false the snackbar will not be destroyed after some time
-		// only when the user clicks on it
-		if (this.options.timeout !== false) {
-			// Start the timer
-			this.timer(function() {
-				snackbar.setAttribute("class", "snackbar");
-				__self.destroy(snackbar);
-			}, this.options.timeout);
-		}
-
-		// Add the event listeners
-		this.listeners(snackbar);
-	},
-
-	/**
-	 * Get the data/ message to display in the snackbar
-	 *
-	 * @return {string}
-	 */
-	getData: function() {
-		if (this.options.link !== false) {
-			return "<span>" + this.data + "</span><a href='" + this.options.url + "'>" + this.options.link + "</a>";
-		}
-		return "<span>" + this.data + "</span>";
-	},
-
-	/**
-	 * Activate the listeners
-	 *
-	 * @param  {Object} element
-	 * @return {void}
-	 */
-	listeners: function(element) {
-		var __self = this;
-		// Adding event listener for when user clicks on the snackbar to remove it
-		element.addEventListener("click", function(){
-			if (typeof __self.callback == "function") {
-				__self.callback();
+				document.body.appendChild(snackbarContainer);
 			}
-			element.setAttribute("class", "snackbar");
-	    	__self.destroy(element);
-		});
+		}
 
-		// Stopping the timer when user hovers on the snackbar
-		element.addEventListener("mouseenter",function(){
-			__self.timer.pause();
-		});
-		element.addEventListener("mouseout",function(){
-			__self.timer.resume();
-		});
-	},
+		/**
+   * Create a Snackbar
+   *
+   * @return {Void}
+   */
 
-	/**
-	 * Remove the snackbar
-	 *
-	 * @param  {object} element
-	 * @return {void}
-	 */
-	destroy: function(element) {
-		// Delay for removing the element (for when there are animations)
-		this.timer.pause();
-		setTimeout(function() {
-			element.remove();
-		}, 10000);
-	},
+	}, {
+		key: "createElement",
+		value: function createElement() {
+			var _this = this;
 
-	/**
-	 * Compare the options to the default ones.
-	 *
-	 * @param  {Object} newOptions
-	 * @return {Object}
-	 */
-	activateOptions: function(newOptions) {
-		var __self = this,
-  			options = newOptions || {};
+			this.snackbar = document.createElement("div");
 
-    	for (var opt in this.options) {
-        	if (__self.options.hasOwnProperty(opt) && !options.hasOwnProperty(opt)) {
-            	options[opt] = __self.options[opt];
-        	}
-        }
-       	return options;
-	},
-};
+			// Put the snackbar inside the snackbar container
+			document.getElementById("snackbar-container").appendChild(this.snackbar);
 
-///////////////////////////////
-// Vuejs/ browserify support //
-///////////////////////////////
-SnackbarLight = {
-	/**
-	 * Install function for Vue
-	 *
-	 * @param  {Object} Vue
-	 * @return {void}
-	 */
-	install: function(Vue){
-		var __self = this;
-		Vue.prototype.$snackbar = {};
-	  	Vue.prototype.$snackbar.create = function(data, options, callback){
-	  		__self.create(data, options, callback);
-	  	};
-	},
+			// Set the html inside the snackbar
+			this.snackbar.innerHTML = this.messageToHtml();
 
-	/**
-	 * Create a new snackbar
-	 *
-	 * @param  {string}   data
-	 * @param  {Object}   options
-	 * @param  {Function} callback
-	 * @return {void}
-	 */
-	create: function(data, options, callback){
-		new Snackbar(data, options, callback);
+			// Set the class of the snackbar
+			this.snackbar.setAttribute("class", "snackbar");
+
+			// Wait to set the active class so animations will be activated
+			setTimeout(function () {
+				_this.snackbar.setAttribute("class", "snackbar " + _this.options.activeClass);
+			}, 50);
+
+			// If the timeout is false the snackbar will not be destroyed after some time
+			// only when the user clicks on it
+			if (this.options.timeout !== "false") {
+				// Start the timer
+				this.timer = new Timer(function () {
+					_this.snackbar.setAttribute("class", "snackbar");
+					_this.destroy();
+				}, this.options.timeout + 50);
+			}
+
+			// Add the event listeners
+			this.addListeners();
+		}
+
+		/**
+   * Makes a html string of the message
+   *
+   * @return {String}
+   */
+
+	}, {
+		key: "messageToHtml",
+		value: function messageToHtml() {
+			if (this.options.link !== false) {
+				return "<span>" + this.data + "</span><a href='" + this.options.url + "'>" + this.options.link + "</a>";
+			}
+			return "<span>" + this.data + "</span>";
+		}
+
+		/**
+   * Add listeners for mouse enter and leave
+   *
+   * @param  {Object} element
+   * @return {Void}
+   */
+
+	}, {
+		key: "addListeners",
+		value: function addListeners() {
+			var _this2 = this;
+
+			// Adding event listener for when user clicks on the snackbar to remove it
+			this.snackbar.addEventListener("click", function () {
+				if (typeof this_.callback == "function") {
+					_this2.callback();
+				}
+				element.setAttribute("class", "snackbar");
+				_this2.destroy();
+			});
+
+			if (this.options.timeout !== "false") {
+				// Stopping the timer when user hovers on the snackbar
+				this.snackbar.addEventListener("mouseenter", function () {
+					_this2.timer.pause();
+				});
+				this.snackbar.addEventListener("mouseout", function () {
+					_this2.timer.resume();
+				});
+			}
+		}
+
+		/**
+   * Remove element after 10 seconds
+   *
+   * @param  {Object} element
+   * @return {Void}
+   */
+
+	}, {
+		key: "destroy",
+		value: function destroy(element) {
+			var _this3 = this;
+
+			if (this.timer instanceof Timer) {
+				this.timer.pause();
+			}
+			// Delay for removing the element (for when there are animations)
+			setTimeout(function () {
+				_this3.snackbar.remove();
+			}, 10000);
+		}
+
+		/**
+   * [activateOptions description]
+   *
+   * @param  {Object} newOptions
+   * @return {Object}           
+   */
+
+	}, {
+		key: "activateOptions",
+		value: function activateOptions(newOptions) {
+			var options = newOptions || {},
+			    defaultOptions = {
+				// How long it takes for the snackbar to disappear
+				timeout: 5000,
+				// Wich class is used to tell that the snackbar is active
+				activeClass: "snackbar-active",
+				// Name of the link or action if specified
+				link: false,
+				// If not used clicking will activate the callback or do nothing
+				url: "#"
+			};
+
+			for (var opt in defaultOptions) {
+				if (defaultOptions.hasOwnProperty(opt) && !options.hasOwnProperty(opt)) {
+					options[opt] = defaultOptions[opt];
+				}
+			}
+			return options;
+		}
+	}]);
+
+	return Snackbar;
+}();
+
+module.exports = Snackbar;
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _snackbar = require('./snackbar.js');
+
+var _snackbar2 = _interopRequireDefault(_snackbar);
+
+var _timer = require('./timer.js');
+
+var _timer2 = _interopRequireDefault(_timer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Main snackbar class
+ */
+
+var SnackbarLight = function () {
+	function SnackbarLight() {
+		_classCallCheck(this, SnackbarLight);
+
+		if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) == "object") {
+			// Export
+			module.exports = this;
+		} else if (typeof define == "function" && define.amd) {
+			//	define([], () => { return this });
+		} else if (window.Vue) {
+				// Vue use if vue is being used on the page
+				Vue.use(this);
+			}
+		this.addListeners();
 	}
-};
 
-if (typeof exports == "object") {
-	// Export
-    module.exports = SnackbarLight;
-} else if (typeof define == "function" && define.amd) {
-	define([], function(){ return SnackbarLight });
-} else if (window.Vue) {
-	// Vue use if vue is being used on the page
-	Vue.use(SnackbarLight);
-}
+	/**
+  * Install function for Vue
+  *
+  * @param  {Object} Vue
+  * @return {Void}
+  */
 
-/////////////////
-// Data-toggle //
-/////////////////
 
-// Search all elements for the data toggle the snackbar
-var elements = document.querySelectorAll("[data-toggle=snackbar]");
+	_createClass(SnackbarLight, [{
+		key: 'install',
+		value: function install(Vue) {
+			var _this = this;
 
-// Loop them and add event listeners to them
-for (var i = elements.length - 1; i >= 0; i--) {
-	elements[i].addEventListener("click", function(){
-		var options = {};
-
-		if (this.getAttribute("data-link") !== null) {
-			options.link = this.getAttribute("data-link");
+			Vue.prototype.$snackbar = {};
+			Vue.prototype.$snackbar.create = function (data, options, callback) {
+				_this.create(data, options, callback);
+			};
 		}
-		if (this.getAttribute("data-timeout") !== null) {
-			options.timeout = this.getAttribute("data-timeout");
+
+		/**
+   * Create a new snackbar
+   *
+   * @param  {string}   data
+   * @param  {Object}   options
+   * @param  {Function} callback
+   * @return {Void}
+   */
+
+	}, {
+		key: 'create',
+		value: function create(data, options, callback) {
+			new _snackbar2.default(data, options, callback);
 		}
-		if (this.getAttribute("data-activeClass") !== null) {
-			options.activeClass = this.getAttribute("data-active-class");
+
+		/**
+   * Get all elements
+   *
+   * @return {Array}
+   */
+
+	}, {
+		key: 'findElements',
+		value: function findElements() {
+			return document.querySelectorAll("[data-toggle=snackbar]");
 		}
-		if (this.getAttribute("data-url")) {
-			options.url = this.getAttribute("data-url");
+
+		/**
+   * Loop all elements and fire addlistener on each
+   *
+   * @return {Void}
+   */
+
+	}, {
+		key: 'addListeners',
+		value: function addListeners() {
+			var elements = this.findElements();
+			for (var i = elements.length - 1; i >= 0; i--) {
+				this.addListener(elements[i]);
+			}
 		}
-			
-		new Snackbar(this.getAttribute("data-content"), options);
-	});
-}
+
+		/**
+   * Add listener to element and fire create when it is clicked upon
+   *
+   * @param {Object} element
+   */
+
+	}, {
+		key: 'addListener',
+		value: function addListener(element) {
+			var _this2 = this;
+
+			element.addEventListener("click", function () {
+				_this2.create(_this2.getAttribute("data-content"), _this2.getOptions(_this2));
+			});
+		}
+
+		/**
+   * Get the options from the attributes attached to the element
+   *
+   * @param  {Object} element
+   * @return {Object}
+   */
+
+	}, {
+		key: 'getOptions',
+		value: function getOptions(element) {
+			var options = {};
+
+			if (element.getAttribute("data-link") !== null) {
+				options.link = element.getAttribute("data-link");
+			}
+			if (element.getAttribute("data-timeout") !== null) {
+				options.timeout = element.getAttribute("data-timeout");
+			}
+			if (element.getAttribute("data-activeClass") !== null) {
+				options.activeClass = element.getAttribute("data-active-class");
+			}
+			if (element.getAttribute("data-url") !== null) {
+				options.url = element.getAttribute("data-url");
+			}
+			return options;
+		}
+	}]);
+
+	return SnackbarLight;
+}();
+
+var snackbarLight = new SnackbarLight();
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Timer = function () {
+    function Timer(callback, remaining) {
+        _classCallCheck(this, Timer);
+
+        // Create random timer id
+        this.timerId = Math.round(Math.random() * 1000);
+
+        this.callback = callback;
+        this.remaining = remaining;
+
+        this.resume();
+    }
+
+    _createClass(Timer, [{
+        key: "pause",
+        value: function pause() {
+            // Clear the timeout
+            window.clearTimeout(this.timerId);
+            // Set the remaining to what time remains
+            this.remaining -= new Date() - this.start;
+        }
+    }, {
+        key: "resume",
+        value: function resume() {
+            this.start = new Date();
+            // Clear the timeout
+            window.clearTimeout(this.timerId);
+            // Set the timeout again
+            this.timerId = window.setTimeout(callback, this.remaining);
+        }
+    }]);
+
+    return Timer;
+}();
+
+module.exports = Timer;

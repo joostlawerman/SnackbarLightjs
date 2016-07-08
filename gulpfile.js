@@ -1,19 +1,16 @@
-var gulp = require('gulp'); 
+'use strict'
 
-// Include Our Plugins
-var jshint = require('gulp-jshint');
-var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
-var minifyCss = require('gulp-minify-css');
+// Global
+const gulp = require('gulp'); 
+const rename = require('gulp-rename');
 
-gulp.task('lint', function() {
-    return gulp.src('./src/*.js')
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'));
-});
+gulp.task('default', ['css-minify', 'javascript-lint', 'javascript', 'javascript-watch']);
 
-gulp.task('minify-css', function() {
+// Css
+const jshint = require('gulp-jshint');
+const minifyCss = require('gulp-minify-css');
+
+gulp.task('css-minify', function() {
   return gulp.src('./src/css/*.css')
     .pipe(concat('snackbarlight.css'))
     .pipe(gulp.dest('./dist/'))
@@ -22,8 +19,14 @@ gulp.task('minify-css', function() {
     .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('scripts', function() {
+// Javascript ES6
+const babel = require('gulp-babel');
+const concat = require('gulp-concat');
+const uglify = require('gulp-uglify');
+
+gulp.task('javascript', function() {
     return gulp.src('./src/js/*.js')
+		.pipe(babel({presets: ['es2015']}))
         .pipe(concat('snackbarlight.js'))
         .pipe(gulp.dest('./dist/'))
         .pipe(rename('snackbarlight.min.js'))
@@ -31,8 +34,13 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('watch', function() {
-    gulp.watch('js/*.js', ['lint', 'scripts']);
+gulp.task('javascript-lint', function() {
+    return gulp.src('./src/*.js')
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
 });
 
-gulp.task('default', ['minify-css','lint','scripts','watch']);
+gulp.task('javascript-watch', function() {
+    gulp.watch('js/*.js', ['javascript-lint', 'javascript']);
+});
+
