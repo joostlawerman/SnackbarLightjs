@@ -42,12 +42,12 @@ You can attach a callback function for when the snackbar is clicked upon.
 		alert("Why did you have to close me!");
 		});
 
-## Browserify
+## Browserify/ Webpack
 [npm](https://www.npmjs.com/package/snackbarlightjs)
 	
 	var Snackbar = require("snackbarlightjs");
 
-	Snackbar.create("I can be used here also awesome!", {}, function(){});
+	Snackbar.create("I can be used here also, awesome!", {}, function(){});
 
 ## Vuejs
 This package does support usage in [Vuejs](http://vuejs.org/)
