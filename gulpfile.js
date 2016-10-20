@@ -4,6 +4,8 @@
 const gulp = require('gulp');
 const rename = require('gulp-rename');
 
+var exec = require('child_process').exec;
+
 gulp.task('default', ['css-minify', 'javascript-lint', 'javascript', 'javascript-watch']);
 
 // Css
@@ -20,18 +22,18 @@ gulp.task('css-minify', function() {
 });
 
 // Javascript ES6
-const babel = require('gulp-babel');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 
-gulp.task('javascript', function() {
-    return gulp.src('./src/js/*.js')
-		.pipe(babel({presets: ['es2015']}))
-        .pipe(concat('snackbarlight.js'))
-        .pipe(gulp.dest('./dist/'))
-        .pipe(rename('snackbarlight.min.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('./dist/'));
+gulp.task('javascript', function(cb) {
+  var command = 'webpack    ./src/js/snackbarlight.js ./dist/snackbarlight.js &&' +
+                'webpack -p ./src/js/snackbarlight.js ./dist/snackbarlight.min.js';
+
+  exec(command, function (err, stdout, stderr) {
+      console.log(stdout);
+      console.log(stderr);
+      cb(err);
+  });
 });
 
 gulp.task('javascript-lint', function() {
@@ -43,4 +45,3 @@ gulp.task('javascript-lint', function() {
 gulp.task('javascript-watch', function() {
     gulp.watch('js/*.js', ['javascript-lint', 'javascript']);
 });
-
