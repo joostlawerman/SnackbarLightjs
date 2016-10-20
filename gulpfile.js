@@ -1,7 +1,7 @@
 'use strict'
 
 // Global
-const gulp = require('gulp'); 
+const gulp = require('gulp');
 const rename = require('gulp-rename');
 
 gulp.task('default', ['css-minify', 'javascript-lint', 'javascript', 'javascript-watch']);
